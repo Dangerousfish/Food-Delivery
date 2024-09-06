@@ -1,38 +1,38 @@
-import jwt from 'jsonwebtoken'
-export const genrateToken =(user)=>{
-    return jwt.sign({
-        _id:user._id,
-        name:user.name,
-        eamil:user.email,
-        isAdmin:user.isAdmin,
-    },'BhaiKaBirthday',{
-        expiresIn:'30d',
-    })
-}
-export const isAuth=(req,res,next)=>{
-    const authorization=req.headers.authorization
-   
-    if(authorization){
-      const token = authorization.slice(7,authorization.length) //bearer token value
-      jwt.verify(token,'BhaiKaBirthday',(err,decode)=>{
-          if(err){
-              res.status(401).send({message:err.message})
-          }
-          else{
-              req.user=decode
-              next()
-          }
-      })
+import jwt from "jsonwebtoken";
+export const genrateToken = (user) => {
+  return jwt.sign(
+    {
+      _id: user._id,
+      name: user.name,
+      eamil: user.email,
+      isAdmin: user.isAdmin,
+    },
+    "BhaiKaBirthday",
+    {
+      expiresIn: "30d",
     }
-    else{
-        res.status(401).send({message:'No token'})
+  );
+};
+export const isAuth = (req, res, next) => {
+  const authorization = req.headers.authorization;
 
-    }
-}
+  if (authorization) {
+    const token = authorization.slice(7, authorization.length); //bearer token value
+    jwt.verify(token, "BhaiKaBirthday", (err, decode) => {
+      if (err) {
+        res.status(401).send({ message: err.message });
+      } else {
+        req.user = decode;
+        next();
+      }
+    });
+  } else {
+    res.status(401).send({ message: "No token" });
+  }
+};
 
-
-export const emailTemplate=(order)=>{
-    return `
+export const emailTemplate = (order) => {
+  return `
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -238,7 +238,9 @@ a[x-apple-data-detectors='true'] {
       <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 20px;font-family:arial,helvetica,sans-serif;" align="left">
         
   <div style="line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="color: #000000; font-size: 14px; line-height: 19.6px;"><span style="font-size: 16px; line-height: 22.4px; font-family: arial, helvetica, sans-serif;">This email is to confirm your recent order. </span><span style="font-size: 16px; line-height: 22.4px; font-family: arial, helvetica, sans-serif;"><strong>Order ID: ${order._id}</strong></span></span></p>
+    <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="color: #000000; font-size: 14px; line-height: 19.6px;"><span style="font-size: 16px; line-height: 22.4px; font-family: arial, helvetica, sans-serif;">This email is to confirm your recent order. </span><span style="font-size: 16px; line-height: 22.4px; font-family: arial, helvetica, sans-serif;"><strong>Order ID: ${
+      order._id
+    }</strong></span></span></p>
   </div>
 
       </td>
@@ -358,7 +360,7 @@ a[x-apple-data-detectors='true'] {
 
 
 
-${order.orderItems.map((item)=>{
+${order.orderItems.map((item) => {
   return `<div class="u-row-container ordered_products" style="padding: 0px;background-color: transparent">
     <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 640px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
       <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
@@ -421,7 +423,7 @@ ${order.orderItems.map((item)=>{
         <td style="overflow-wrap:break-word;word-break:break-word;padding:5px 20px 5px 10px;font-family:arial,helvetica,sans-serif;" align="left">
           
     <div style="line-height: 140%; text-align: right; word-wrap: break-word;">
-      <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 16px; line-height: 22.4px;">${item.price} Rs.</span></p>
+      <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 16px; line-height: 22.4px;">£${item.price} </span></p>
     </div>
   
         </td>
@@ -436,9 +438,8 @@ ${order.orderItems.map((item)=>{
         <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
       </div>
     </div>
-  </div> `
-})
-}
+  </div> `;
+})}
 <div class="u-row-container" style="padding: 0px;background-color: transparent">
   <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 640px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #ffffff;">
     <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
@@ -519,7 +520,9 @@ ${order.orderItems.map((item)=>{
       <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 21px 15px 10px;font-family:arial,helvetica,sans-serif;" align="left">
         
   <div style="line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%; text-align: right;"><span style="font-size: 16px; line-height: 22.4px;">${order.shippingPrice} Rs.</span></p>
+    <p style="font-size: 14px; line-height: 140%; text-align: right;"><span style="font-size: 16px; line-height: 22.4px;">£${
+      order.shippingPrice
+    }</span></p>
   </div>
 
       </td>
@@ -577,8 +580,9 @@ ${order.orderItems.map((item)=>{
       <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 21px 10px 10px;font-family:arial,helvetica,sans-serif;" align="left">
         
   <div style="line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%; text-align: right;"><span style="font-size: 16px; line-height: 22.4px;"><strong>${order.totalprice
-    } Rs.</strong></span></p>
+    <p style="font-size: 14px; line-height: 140%; text-align: right;"><span style="font-size: 16px; line-height: 22.4px;"><strong>£${
+      order.totalprice
+    }</strong></span></p>
   </div>
 
       </td>
@@ -630,7 +634,9 @@ ${order.orderItems.map((item)=>{
       <td style="overflow-wrap:break-word;word-break:break-word;padding:6px 10px 10px;font-family:arial,helvetica,sans-serif;" align="left">
         
   <h3 style="margin: 0px; color: #000000; line-height: 140%; text-align: left; word-wrap: break-word; font-weight: normal; font-family: arial,helvetica,sans-serif; font-size: 15px;">
-    ${order.shippingAddress.address},${order.shippingAddress.town},${order.shippingAddress.town},${order.shippingAddress.state},${order.shippingAddress.pinCode}
+    ${order.shippingAddress.address},${order.shippingAddress.town},${
+    order.shippingAddress.town
+  },${order.shippingAddress.state},${order.shippingAddress.pinCode}
   </h3>
 
       </td>
@@ -751,5 +757,5 @@ ${order.orderItems.map((item)=>{
 </html>
 
     
-    `
-}
+    `;
+};
